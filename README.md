@@ -45,7 +45,8 @@ invest-decision-lens/
 ├── CHANGELOG.md                    # 版本记录
 ├── SECURITY.md                    # 漏洞上报策略与安全边界
 ├── tests/
-│   └── test_render.py             # 渲染输出断言测试（stdlib unittest）
+│   ├── test_render.py             # 渲染输出断言 + 匿名化守卫（stdlib unittest）
+│   └── test_cli.py                # CLI 模式测试（--template / stdin / --input / 非法 JSON）
 ├── references/
 │   ├── decision-checklist.md       # 八原则深度展开 + 建仓 Checklist 模板
 │   └── lifecycle-mapping.md        # 六阶段生命周期映射详解 + 匿名化案例
