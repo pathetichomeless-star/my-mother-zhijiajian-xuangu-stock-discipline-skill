@@ -1,0 +1,31 @@
+name: validate-skill
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Validate example JSON parses
+        run: python -c "import json, glob; [json.load(open(f, encoding='utf-8')) for f in glob.glob('examples/*.json')]; print('JSON OK')"
+
+      - name: Render every example analysis
+        run: |
+          for f in examples/sample-event*.json; do
+            python scripts/event_to_lens.py --input "$f" > /tmp/out.md && test -s /tmp/out.md && echo "rendered $f OK"
+          done
+
+      - name: Template mode works
+        run: python scripts/event_to_lens.py --template > /tmp/tpl.json && python -c "import json; json.load(open('/tmp/tpl.json')); print('template OK')"
+
+      - name: Run all tests
+        run: python -m unittest discover -s tests -v
